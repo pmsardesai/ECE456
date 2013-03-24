@@ -20,7 +20,7 @@ public class Guest {
 			
 			Statement s = conn.createStatement();
 			s.executeUpdate("INSERT INTO guest (guestID, guestAddress, guestName) " +
-					  "VALUES ('lastGuestID', 'address', 'name')");	
+					        "VALUES (" + lastGuestID + ", '" + address + "', '" + name + "')");	
 		} catch (SQLException e) {
 			System.out.println("Error: Could not add guest.");
 			e.printStackTrace();
@@ -29,11 +29,31 @@ public class Guest {
 		System.out.println("Successfully added guest.");
 	}
 	
-	public static void update(){
-		
+	public static void update(Connection conn, String id, String name, String address){
+		try {			
+			Statement s = conn.createStatement();
+			s.executeUpdate("UPDATE guest SET " +
+							"guestName = '" + name + "', " +
+					        "guestAddress = '" + address + "' " +
+					  		"WHERE guestID = " + id);	
+		} catch (SQLException e) {
+			System.out.println("Error: Could not update guest.");
+			e.printStackTrace();
+			return;
+		}
+		System.out.println("Successfully updated guest.");
 	}
 	
-	public static void delete(){
-		
+	public static void delete(Connection conn, String id){
+		try {			
+			Statement s = conn.createStatement();
+			s.executeUpdate("DELETE FROM guest " +
+					  		"WHERE guestID = " + id);	
+		} catch (SQLException e) {
+			System.out.println("Error: Could not delete guest.");
+			e.printStackTrace();
+			return;
+		}
+		System.out.println("Successfully deleted guest.");
 	}	
 }
