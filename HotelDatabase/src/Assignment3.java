@@ -134,11 +134,6 @@ public class Assignment3 {
         System.out.println("Enter the room price (between 50.00 and 250.00), or press enter to skip: ");
         String price = bufferRead.readLine().length() == 0 ? null : bufferRead.readLine();
         
-        while (!Booking.isPriceValid(price)) {
-        	System.out.println("Invalid: Please enter a price between 50.00 and 250.00: ");
-	        price = bufferRead.readLine();
-        }
-
         // get room type
         System.out.println("Enter the room type (Single, Double, King, Queen), or press enter to skip: ");
         String type = bufferRead.readLine().length() == 0 ? null : bufferRead.readLine();
@@ -147,22 +142,26 @@ public class Assignment3 {
         System.out.println("Enter the start date (YYYY-MM-DD), or press enter to skip: ");
         String start = bufferRead.readLine();
        
-        while(!Booking.isDateValid(start)){
-        	System.out.println("Invalid: Please enter start date in this format (YYYY-MM-DD):");
-	        start = bufferRead.readLine();
+        if (start != null) {
+        	while(!Booking.isDateValid(start)){
+	        	System.out.println("Invalid: Please enter start date in this format (YYYY-MM-DD):");
+		        start = bufferRead.readLine();
+	        }
         }
         
         // get end date
         System.out.println("Enter the end date (YYYY-MM-DD), or press enter to skip: ");
         String end = bufferRead.readLine();
         
-        while(!Booking.isDateValid(end)){
-        	System.out.println("Invalid: Please enter end date in this format (YYYY-MM-DD):");
-	        start = bufferRead.readLine();
+        if (end != null) {
+	        while(!Booking.isDateValid(end)){
+	        	System.out.println("Invalid: Please enter end date in this format (YYYY-MM-DD):");
+		        start = bufferRead.readLine();
+	        }
         }
         
     	//call delete guest
-    	Guest.delete(conn, end);
+    	Booking.findRoom(conn, start, end, hotel, city, price, type);
 	}
 	
 }
