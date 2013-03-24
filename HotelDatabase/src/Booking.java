@@ -1,7 +1,9 @@
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 
 import com.mysql.jdbc.Connection;
 
@@ -72,8 +74,28 @@ public class Booking {
 					"\nCity: " + rs.getString(3) +
 					"\nRoomNo: " + rs.getString(4) +
 					"\nPrice: " + rs.getString(5) + 
-					"\nType: " + rs.getString(6)
+					"\nType: " + rs.getString(6) + "\n\n"
 					); 
 		}
 	}
+	
+	public static Boolean isDateValid(String date){
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
+		//check if we can parse the string input into a date yyyy-MMM-dd format
+		try{
+			sdf.parse(date); 
+		}catch(Exception e){
+			return false; 
+		}
+		return true; 
+	}
+	
+	public static Boolean isPriceValid(String price){
+		//check if we can parse to ##.## or ###.## (since values are between 
+		// 200.00 and 50.00 only
+		if(price.matches("\\d{2-3}\\.\\d{2}"))
+		    return true;
+		return false;
+	}
+	
 }
