@@ -2,22 +2,24 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import com.mysql.*;
 import com.mysql.jdbc.Connection;
-
 
 public class Guest {
 	public static void add(Connection conn, String name, String address) {
 		try {
+			// get the last guest ID from the table
 			PreparedStatement ps = conn.prepareStatement(
 					"SELECT guestID FROM guest ORDER BY guestID DESC LIMIT 1");
 			ResultSet rs = ps.executeQuery();
 
-			int lastGuestID = 1;
+			int lastGuestID = 1; // if there are no guests in the table
+			// if there are guests in the table,
 			if(rs.next()) {
-			  lastGuestID = Integer.parseInt(rs.getString(1));
-			}
+				// Increment
+				lastGuestID = Integer.parseInt(rs.getString(1)) + 1;
+			} 
 			
+			// Insert guest into table
 			Statement s = conn.createStatement();
 			s.executeUpdate("INSERT INTO guest (guestID, guestAddress, guestName) " +
 					        "VALUES (" + lastGuestID + ", '" + address + "', '" + name + "')");	
