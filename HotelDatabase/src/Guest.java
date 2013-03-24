@@ -11,6 +11,13 @@ public class Guest {
 		
 	}
 	
+	public static void update(){
+		
+	}
+	
+	public static void delete(){
+		
+	}
 	
 	
 }
