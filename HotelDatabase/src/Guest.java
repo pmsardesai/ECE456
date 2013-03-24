@@ -58,4 +58,38 @@ public class Guest {
 		}
 		System.out.println("Successfully deleted guest.");
 	}	
+	
+	public static boolean isNameValid(String name) {
+		// make sure name is not empty or more than 30 characters
+		if (name.trim().length() == 0 || name.trim().length() > 30) {
+			return false;
+		}
+		return true;
+	}
+	
+	public static boolean isGuestIdValid(Connection conn, String id) {
+		try {
+			// make sure id is an integer
+			int guestID = Integer.parseInt(id);
+			
+			// make sure guest id is a 4 digit number
+			if (guestID / 10000 > 1) {
+				return false;
+			}
+						
+			// get the last guest ID from the table
+			PreparedStatement ps = conn.prepareStatement(
+					"SELECT * FROM guest WHERE guestID = " + guestID);
+			ResultSet rs = ps.executeQuery();
+			
+			// if id exists in database,
+			if (rs.next()) {
+				return true;
+			} else { // if id does not exist in database,
+				return false;
+			}
+		} catch (Exception e) {
+			return false;
+		}
+	}
 }
