@@ -1,5 +1,4 @@
 import java.io.BufferedReader;
-import java.io.Console;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
@@ -7,7 +6,8 @@ import java.io.InputStreamReader;
 public class Assignment3 {
 
 	public static void main(String args[]){
-		System.out.println("Enter something here : ");
+		System.out.println("Welcome to the Hotel Database");
+		System.out.println("Menu: (A) Add Guest /");
 		 
 		try{
 		    BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
