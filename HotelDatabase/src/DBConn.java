@@ -2,7 +2,7 @@ import java.sql.*;
 
 public class DBConn {
 	
-	public static Connection main(String args[]) throws Exception
+	public static Connection getConnection() throws Exception
 	{
 		Class.forName("com.mysql.jdbc.Driver"); 
 		String url = "jdbc:mysql://localhost/test"; 
