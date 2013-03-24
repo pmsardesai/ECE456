@@ -81,7 +81,7 @@ public class Booking {
 	
 	public static Boolean isDateValid(String date){
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
-		//check if we can parse the string input into a date yyyy-MMM-dd format
+		//check if we can parse the string input into a date yyyy-MM-dd format
 		try{
 			sdf.parse(date); 
 		}catch(Exception e){
