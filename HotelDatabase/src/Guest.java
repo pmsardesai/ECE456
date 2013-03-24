@@ -24,6 +24,7 @@ public class Guest {
 		} catch (SQLException e) {
 			System.out.println("Error: Could not add guest.");
 			e.printStackTrace();
+			return;
 		}
 		System.out.println("Successfully added guest.");
 	}
