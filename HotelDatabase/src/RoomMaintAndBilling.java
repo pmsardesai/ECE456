@@ -80,7 +80,6 @@ public class RoomMaintAndBilling {
 			ResultSet rs = ps.executeQuery();
 			
 			System.out.println("Arrivals:");
-			System.out.println("--------");
 			while(rs.next()){
 				System.out.println("Hotel ID: " + rs.getString(1) +
 								   "\nRoom Number: " + rs.getString(2) +
@@ -89,20 +88,19 @@ public class RoomMaintAndBilling {
 								   "\nEnd Date: " + rs.getString(5) + "\n\n"
 								  ); 
 			}
+			System.out.println("\nDone.");
 		} catch (SQLException e) {
 			return false;
 		}
-		
 	
-		try {
+		try {			
 			// get all departures
 			String sql = "SELECT hotelID, roomNo, guestID, startDate, endDate FROM booking " +
-						 "WHERE endDate = ";
+						 "WHERE endDate = CURRENT_DATE";
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
 			
-			System.out.println("Departures:");
-			System.out.println("----------");
+			System.out.println("\nDepartures:");
 			while(rs.next()){
 				System.out.println("Hotel ID: " + rs.getString(1) +
 								   "\nRoom Number: " + rs.getString(2) +
@@ -111,6 +109,8 @@ public class RoomMaintAndBilling {
 								   "\nEnd Date: " + rs.getString(5) + "\n\n"
 								  ); 
 			}
+			
+			System.out.println("\nDone");
 		} catch (SQLException e) {
 			return false;
 		}
