@@ -21,7 +21,7 @@ public class Assignment3 {
 		System.out.println("Welcome to the Hotel Database");
 		while(true){
 			// console IO
-			System.out.println("\nMenu: \n(A) Add Guest \n(B) Delete Guest \n(C) Update Guest");
+			System.out.println("\nMenu: \n(A) Add Guest \n(B) Delete Guest \n(C) Update Guest \n(D) Find Room");
 			 
 			try{
 			    bufferRead = new BufferedReader(new InputStreamReader(System.in));
