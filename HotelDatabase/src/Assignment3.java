@@ -124,44 +124,43 @@ public class Assignment3 {
 	public static void searchHotels() throws IOException, Exception{
     	// get hotel name
 		System.out.println("Enter the hotel name, or press enter to skip: ");
-        String hotel = bufferRead.readLine().length() == 0 ? null : bufferRead.readLine() ;
+        String hotel = bufferRead.readLine();
+        hotel = hotel.length() == 0 ? null : hotel;
         
         // get city input 
         System.out.println("Enter the city, or press enter to skip: ");
-        String city = bufferRead.readLine().length() == 0 ? null : bufferRead.readLine();
+        String city = bufferRead.readLine();
+        city = city.length() == 0 ? null : city;
         
         // get price input
         System.out.println("Enter the room price (between 50.00 and 250.00), or press enter to skip: ");
-        String price = bufferRead.readLine().length() == 0 ? null : bufferRead.readLine();
+        String price = bufferRead.readLine();
+        price = price.length() == 0 ? null : price;
         
         // get room type
         System.out.println("Enter the room type (Single, Double, King, Queen), or press enter to skip: ");
-        String type = bufferRead.readLine().length() == 0 ? null : bufferRead.readLine();
+        String type = bufferRead.readLine();
+        type = type.length() == 0 ? null : type;
         
         // get start date
-        System.out.println("Enter the start date (YYYY-MM-DD), or press enter to skip: ");
+        System.out.println("Enter the start date (YYYY-MM-DD): ");
         String start = bufferRead.readLine();
-       
-        if (start != null) {
-        	while(!Booking.isDateValid(start)){
-	        	System.out.println("Invalid: Please enter start date in this format (YYYY-MM-DD):");
-		        start = bufferRead.readLine();
-	        }
+        
+    	while(!Booking.isDateValid(start)){
+        	System.out.println("Invalid: Please enter start date in this format (YYYY-MM-DD):");
+	        start = bufferRead.readLine();
         }
         
         // get end date
-        System.out.println("Enter the end date (YYYY-MM-DD), or press enter to skip: ");
+        System.out.println("Enter the end date (YYYY-MM-DD): ");
         String end = bufferRead.readLine();
-        
-        if (end != null) {
-	        while(!Booking.isDateValid(end)){
-	        	System.out.println("Invalid: Please enter end date in this format (YYYY-MM-DD):");
-		        start = bufferRead.readLine();
-	        }
+
+        while(!Booking.isDateValid(end)){
+        	System.out.println("Invalid: Please enter end date in this format (YYYY-MM-DD):");
+	        end = bufferRead.readLine();
         }
         
     	//call delete guest
     	Booking.findRoom(conn, start, end, hotel, city, price, type);
 	}
-	
 }
