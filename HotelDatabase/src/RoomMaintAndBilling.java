@@ -19,6 +19,7 @@ public class RoomMaintAndBilling {
 			PreparedStatement ps = conn.prepareStatement(sql);			
 			ResultSet rs = ps.executeQuery();
 			
+			// display all the bills of departing guests
 			System.out.println("Billing Log");
 			System.out.println("-----------");
 			
@@ -88,13 +89,17 @@ public class RoomMaintAndBilling {
 								   "\nEnd Date: " + rs.getString(5) + "\n\n"
 								  ); 
 			}
-			
-			
+		} catch (SQLException e) {
+			return false;
+		}
+		
+	
+		try {
 			// get all departures
-			sql = "SELECT hotelID, roomNo, guestID, startDate, endDate FROM booking " +
+			String sql = "SELECT hotelID, roomNo, guestID, startDate, endDate FROM booking " +
 						 "WHERE endDate = ";
-			ps = conn.prepareStatement(sql);
-			rs = ps.executeQuery();
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
 			
 			System.out.println("Departures:");
 			System.out.println("----------");
@@ -106,11 +111,11 @@ public class RoomMaintAndBilling {
 								   "\nEnd Date: " + rs.getString(5) + "\n\n"
 								  ); 
 			}
-			
-			return true;
 		} catch (SQLException e) {
 			return false;
 		}
+		
+		return true;
 	}
 	
 // ----------------------------------- Format
