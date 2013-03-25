@@ -64,7 +64,7 @@ public class Booking {
 		
 		
 		String query = select + from + subquery; 
-		System.out.println(query); 
+		//System.out.println(query); 
 		Statement s = conn.createStatement();
 		ResultSet rs = s.executeQuery(query); 
 		
@@ -93,6 +93,35 @@ public class Booking {
 		return true; 
 	}
 	
+	public static Boolean checkBookingExists(Connection conn, String hotelID, 
+			String roomNo, String startDate, String endDate){
+		
+		// find bookings with the same hotel, and room + overlapping startDate and endDate
+		String query = "SELECT * FROM BOOKING WHERE " +
+				"hotelID = '" + hotelID + "' AND " +
+				"roomNo = '" + roomNo + "' AND " +
+				"startDate BETWEEN '" + startDate + "' AND '" + endDate +
+					"' OR endDate BETWEEN '" + startDate + "' AND '" + endDate +
+					"'OR (startDate < '" + startDate + 
+					"' AND endDate > '" + endDate + "')"; 
+		System.out.println(query); 
+		
+		try {
+			Statement s = conn.createStatement();
+			ResultSet rs = s.executeQuery(query); 
+			
+			if(rs.next()) //results exist - there is booking conflict
+				return true; 
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+	
+		return false; 
+	}
+	
+	
 	public static Boolean isPriceValid(String price){
 		//check if we can parse to ##.## or ###.## (since values are between 
 		// 200.00 and 50.00 only
@@ -104,38 +133,46 @@ public class Booking {
 //-------------------------------QUESTION 3 - BOOKING A ROOM
 	public static String bookRoom(Connection conn, String hotelID, String roomNo, 
 			String guestID, String startDate, String endDate){
-		
+
 		int lastBookingID = 1; // if there are no bookings in the table
 		
-		try {
-			// get the last guest ID from the table
-			PreparedStatement ps = conn.prepareStatement(
-					"SELECT bookingID FROM Booking ORDER BY bookingID DESC LIMIT 1");
-			ResultSet rs = ps.executeQuery();
-
-			// if there are bookings in the table,
-			if(rs.next()) {
-				// Increment
-				lastBookingID = Integer.parseInt(rs.getString(1)) + 1;
-			} 
-			
-			// Insert booking into table
-			Statement s = conn.createStatement();
-//			s.executeUpdate("INSERT INTO guest (guestID, guestAddress, guestName) " +
-//					        "VALUES ('" + formatGuestID(lastBookingID) + "', '" + address + "', '" + name + "')");	
-		} catch (SQLException e) {
-			System.out.println("Error: Could not add guest.");
-			e.printStackTrace();
-			return "Booking didn't work"; 
+		if(!checkBookingExists(conn, hotelID, roomNo, startDate, endDate)){
+		
+			try {
+				// get the last guest ID from the table
+				PreparedStatement ps = conn.prepareStatement(
+						"SELECT bookingID FROM Booking ORDER BY bookingID DESC LIMIT 1");
+				ResultSet rs = ps.executeQuery();
+	
+				// if there are bookings in the table,
+				if(rs.next()) {
+					// Increment
+					lastBookingID = Integer.parseInt(rs.getString(1)) + 1;
+				} 
+				
+				// Insert booking into table
+				Statement s = conn.createStatement();
+				s.executeUpdate("INSERT INTO Booking (bookingID, hotelID, guestID, roomNo, startDate, endDate) " +
+						        "VALUES ('" + formatID(lastBookingID) + "', '" + 
+						formatID(Integer.parseInt(hotelID)) + "', '" + 
+						formatID(Integer.parseInt(guestID)) + "', '" +
+						formatID(Integer.parseInt(roomNo)) + "', '" +
+						startDate + "', '" + endDate + "');");	
+			} catch (SQLException e) {
+				System.out.println("Error: Could not add booking.");
+				//e.printStackTrace();
+				return "Error: Could not add booking."; 
+			}
+			System.out.println("Successfully booked room: " + String.valueOf(lastBookingID));
+			return String.valueOf(lastBookingID);
 		}
-		System.out.println("Successfully booked room");
-		return String.valueOf(lastBookingID); 
-
+		System.out.println("Error: Could not add booking.");
+		return "Error: Could not add booking."; 
 	}
 	
 	
 	//------------------------ FORMAT
-	public static String formatGuestID(int id) {
+	public static String formatID(int id) {
 		String idStr = "";
 		
 		int first = (int)(id/1000)*1000;

@@ -5,7 +5,7 @@ Guest name cannot be null
 Search hotels
 - user has to enter start and end date.. all other fields are optional
 - we assume that the user will be aware of the value restrictions for city, price and room type
-- 
+- formatting of the hotel, room, guest and booking id to 0000 format
 
 
 3)
