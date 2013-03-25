@@ -2,6 +2,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -39,10 +40,9 @@ public class RoomMaintAndBilling {
 				System.out.println("\nHotel ID: " + rs.getString(1) +
 								   "\nGuest ID: " + rs.getString(3) +
 								   "\nRoom number: " + rs.getString(2) +
-								   "\nTotal number of days: " + numDays +
-								   "\nTotal price: " + totalPrice 
-								  ); 
-				
+								   "\nTotal number of days: " + numDays);
+				System.out.printf("\nTotal price: %1$.2f", totalPrice);
+		
 				// Save billing details in billing log
 				ps = conn.prepareStatement(
 						"SELECT billingID FROM BillingLog ORDER BY billingID DESC LIMIT 1");
