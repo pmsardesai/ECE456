@@ -9,7 +9,7 @@ import com.mysql.jdbc.Connection;
 
 public class Booking {
 
-	
+//-----------------------------QUESTION 2
 	public static void findRoom(Connection conn, String start, String end, 
 			String name, String city, String price, String type) throws SQLException{
 		
@@ -78,12 +78,15 @@ public class Booking {
 					); 
 		}
 	}
-	
+ //-----------------------VALIDATION
 	public static Boolean isDateValid(String date){
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
+		sdf.setLenient(false);
+		
 		//check if we can parse the string input into a date yyyy-MM-dd format
 		try{
-			sdf.parse(date); 
+			System.out.println(sdf.parse(date));  
+			
 		}catch(Exception e){
 			return false; 
 		}
@@ -98,4 +101,75 @@ public class Booking {
 		return false;
 	}
 	
+//-------------------------------QUESTION 3 - BOOKING A ROOM
+	public static String bookRoom(Connection conn, String hotelID, String roomNo, 
+			String guestID, String startDate, String endDate){
+		
+		int lastBookingID = 1; // if there are no bookings in the table
+		
+		try {
+			// get the last guest ID from the table
+			PreparedStatement ps = conn.prepareStatement(
+					"SELECT bookingID FROM Booking ORDER BY bookingID DESC LIMIT 1");
+			ResultSet rs = ps.executeQuery();
+
+			// if there are bookings in the table,
+			if(rs.next()) {
+				// Increment
+				lastBookingID = Integer.parseInt(rs.getString(1)) + 1;
+			} 
+			
+			// Insert booking into table
+			Statement s = conn.createStatement();
+//			s.executeUpdate("INSERT INTO guest (guestID, guestAddress, guestName) " +
+//					        "VALUES ('" + formatGuestID(lastBookingID) + "', '" + address + "', '" + name + "')");	
+		} catch (SQLException e) {
+			System.out.println("Error: Could not add guest.");
+			e.printStackTrace();
+			return "Booking didn't work"; 
+		}
+		System.out.println("Successfully booked room");
+		return String.valueOf(lastBookingID); 
+
+	}
+	
+	
+	//------------------------ FORMAT
+	public static String formatGuestID(int id) {
+		String idStr = "";
+		
+		int first = (int)(id/1000)*1000;
+		int second = (int)((id - first)/100)*100;
+		int third = (int)((id - first - second)/10)*10;
+		int fourth = (int)(id - first - second - third);
+		
+		if ((int)(id/1000) == 0) {
+			idStr = idStr + "0";
+		} else {
+			idStr = idStr + (id/1000);
+		}
+		
+		if ((int)((id - first)/100) == 0) {
+			idStr = idStr + "0";
+		} else {
+			idStr = idStr + (int)((id - first)/100);
+		}
+		
+		if ((int)((id - first - second)/10) == 0) {
+			idStr = idStr + "0";
+		} else {
+			idStr = idStr + (int)((id - first - second)/10);
+		}
+		
+		if ((int)(id - first - second - third) == 0) {
+			idStr = idStr + "0";
+		} else {
+			idStr = idStr + (int)(id - first - second - third);
+		}
+		
+		return idStr;
+	}
+
 }
+
+
