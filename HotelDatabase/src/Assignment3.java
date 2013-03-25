@@ -21,7 +21,8 @@ public class Assignment3 {
 		System.out.println("Welcome to the Hotel Database");
 		while(true){
 			// console IO
-			System.out.println("\nMenu: \n(A) Add Guest \n(B) Delete Guest \n(C) Update Guest \n(D) Find Room");
+			System.out.println("\nMenu: \n(A) Add Guest \n(B) Delete Guest \n(C) Update Guest \n(D) Find Room " + 
+							   "\n(E) Book a Room");
 			 
 			try{
 			    bufferRead = new BufferedReader(new InputStreamReader(System.in));
@@ -40,9 +41,11 @@ public class Assignment3 {
 			    case 'C': //update guest
 			    	updateGuest(); 
 			    	break;
-			    case 'D':
+			    case 'D': //search hotels
 			    	searchHotels();
 			    	break;
+			    case 'E': // book a room
+			    	registerRoom();
 			    default:
 			    	System.out.println("That option does not exist.");
 			    	break; 
@@ -160,7 +163,42 @@ public class Assignment3 {
 	        end = bufferRead.readLine();
         }
         
-    	//call delete guest
+    	// check valid rooms
     	Booking.findRoom(conn, start, end, hotel, city, price, type);
+	}
+	
+	public static void registerRoom() throws IOException, Exception{
+		// get hotel name
+		System.out.println("Enter the hotel ID:");
+        String hotelID = bufferRead.readLine();
+        
+        // get room number
+        System.out.println("Enter the room number: ");
+        String roomNo = bufferRead.readLine();
+        
+        // get guest ID
+        System.out.println("Enter the guest ID: ");
+        String guestID = bufferRead.readLine();
+
+        // get start date
+        System.out.println("Enter the start date (YYYY-MM-DD): ");
+        String start = bufferRead.readLine();
+        
+    	while(!Booking.isDateValid(start)){
+        	System.out.println("Invalid: Please enter start date in this format (YYYY-MM-DD):");
+	        start = bufferRead.readLine();
+        }
+        
+        // get end date
+        System.out.println("Enter the end date (YYYY-MM-DD): ");
+        String end = bufferRead.readLine();
+
+        while(!Booking.isDateValid(end)){
+        	System.out.println("Invalid: Please enter end date in this format (YYYY-MM-DD):");
+	        end = bufferRead.readLine();
+        }
+        
+        // book a room
+        Booking.bookRoom(conn, hotelID, roomNo, guestID, start, end);
 	}
 }
