@@ -85,7 +85,7 @@ public class Booking {
 		
 		//check if we can parse the string input into a date yyyy-MM-dd format
 		try{
-			System.out.println(sdf.parse(date));  
+			sdf.parse(date);  
 			
 		}catch(Exception e){
 			return false; 
@@ -98,13 +98,13 @@ public class Booking {
 		
 		// find bookings with the same hotel, and room + overlapping startDate and endDate
 		String query = "SELECT * FROM BOOKING WHERE " +
-				"hotelID = '" + hotelID + "' AND " +
-				"roomNo = '" + roomNo + "' AND " +
+				formatID(Integer.parseInt(hotelID)) + "', '" + 
+				formatID(Integer.parseInt(roomNo)) + "', '" +
 				"startDate BETWEEN '" + startDate + "' AND '" + endDate +
 					"' OR endDate BETWEEN '" + startDate + "' AND '" + endDate +
 					"'OR (startDate < '" + startDate + 
 					"' AND endDate > '" + endDate + "')"; 
-		System.out.println(query); 
+		//System.out.println(query); 
 		
 		try {
 			Statement s = conn.createStatement();
@@ -115,7 +115,8 @@ public class Booking {
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			return false; 
 		} 
 	
 		return false; 
@@ -159,14 +160,14 @@ public class Booking {
 						formatID(Integer.parseInt(roomNo)) + "', '" +
 						startDate + "', '" + endDate + "');");	
 			} catch (SQLException e) {
-				System.out.println("Error: Could not add booking.");
+				System.out.println("Error: Could not add booking - error.");
 				//e.printStackTrace();
 				return "Error: Could not add booking."; 
 			}
 			System.out.println("Successfully booked room: " + String.valueOf(lastBookingID));
 			return String.valueOf(lastBookingID);
 		}
-		System.out.println("Error: Could not add booking.");
+		System.out.println("Error: Could not add booking - conflict");
 		return "Error: Could not add booking."; 
 	}
 	
