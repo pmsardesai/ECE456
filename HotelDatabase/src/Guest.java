@@ -22,10 +22,10 @@ public class Guest {
 			// Insert guest into table
 			Statement s = conn.createStatement();
 			s.executeUpdate("INSERT INTO guest (guestID, guestAddress, guestName) " +
-					        "VALUES ('" + formatGuestID(lastGuestID) + "', '" + address + "', '" + name + "')");	
+					        "VALUES ('" + formatID(lastGuestID) + "', '" + address + "', '" + name + "')");	
 		} catch (SQLException e) {
-			System.out.println("Error: Could not add guest.");
-			e.printStackTrace();
+			System.out.println("Error: An unexpected error occurred, and the guest could not be added. " +
+		                       "Please try again.");
 			return;
 		}
 		System.out.println("Successfully added guest.");
@@ -51,7 +51,7 @@ public class Guest {
 				        	"guestAddress = '" + address + "' ";
 			}
 			sql = sql + "WHERE guestID = '" + 
-			  			formatGuestID(Integer.parseInt(id)) + "'";
+			  			formatID(Integer.parseInt(id)) + "'";
 			
 			s.executeUpdate(sql);
 		} catch (Exception e) {
@@ -67,7 +67,7 @@ public class Guest {
 			Statement s = conn.createStatement();
 			s.executeUpdate("DELETE FROM guest " +
 					  		"WHERE guestID = '" + 
-					        formatGuestID(Integer.parseInt(id)) + "'"
+					        formatID(Integer.parseInt(id)) + "'"
 					       );	
 		} catch (SQLException e) {
 			System.out.println("Error: Could not delete guest.");
@@ -78,7 +78,7 @@ public class Guest {
 	}	
 	
 // ------------------------ FORMAT
-	public static String formatGuestID(int id) {
+	public static String formatID(int id) {
 		String idStr = "";
 		
 		int first = (int)(id/1000)*1000;
@@ -114,7 +114,6 @@ public class Guest {
 	}
 	
 // ------------------------ VALIDATION
-	
 	public static boolean isNameValid(String name) {
 		// make sure name is not empty or more than 30 characters
 		if (name.trim().length() == 0 || name.trim().length() > 30) {
@@ -143,7 +142,7 @@ public class Guest {
 						
 			// get the last guest ID from the table
 			PreparedStatement ps = conn.prepareStatement(
-					"SELECT * FROM guest WHERE guestID = '" + formatGuestID(guestID) + "'");
+					"SELECT * FROM guest WHERE guestID = '" + formatID(guestID) + "'");
 			ResultSet rs = ps.executeQuery();
 			
 			// if id exists in database,
