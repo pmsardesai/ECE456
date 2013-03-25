@@ -20,7 +20,7 @@ public class RoomMaintAndBilling {
 			ResultSet rs = ps.executeQuery();
 			
 			// display all the bills of departing guests
-			System.out.println("Billing Log");
+			System.out.println("\nBilling Log");
 			System.out.println("-----------");
 			
 			while(rs.next()){
@@ -31,16 +31,16 @@ public class RoomMaintAndBilling {
 				Date startDate = sdf.parse(rs.getString(4));
 				Date endDate = sdf.parse(rs.getString(5));
 				int numDays = (int)( (endDate.getTime() - startDate.getTime() ) / (1000 * 60 * 60 * 24));
-				
+			
 				// get total price
-				double totalPrice = Integer.parseInt(rs.getString(6)) * numDays;
+				double totalPrice = Double.parseDouble(rs.getString(6)) * numDays;
 				
 				// print departures				
-				System.out.println("Hotel ID: " + rs.getString(1) +
+				System.out.println("\nHotel ID: " + rs.getString(1) +
 								   "\nGuest ID: " + rs.getString(3) +
 								   "\nRoom number: " + rs.getString(2) +
 								   "\nTotal number of days: " + numDays +
-								   "\nTotal price: " + totalPrice + "\n\n"
+								   "\nTotal price: " + totalPrice 
 								  ); 
 				
 				// Save billing details in billing log
@@ -59,10 +59,11 @@ public class RoomMaintAndBilling {
 				Statement s = conn.createStatement();
 				s.executeUpdate("INSERT INTO BillingLog (billingID, hotelID, guestID, roomNo, totalDays, totalPrice) " +
 						        "VALUES ( '" + formatID(lastBillingID) + "'," +
-						        "         '" + formatID(Integer.getInteger(rs.getString(1))) + "'," + 
-						        "         '" + formatID(Integer.getInteger(rs.getString(3))) + "'," +
-						        "         '" + rs.getString(2) + "'," + 
-						        "         '" + totalPrice + "')");
+						        "         '" + formatID(Integer.parseInt(rs.getString(1))) + "'," + 
+						        "         '" + formatID(Integer.parseInt(rs.getString(3))) + "'," +
+						        "         '" + formatID(Integer.parseInt(rs.getString(2))) + "'," + 
+						        "          " + numDays + ", " +
+						        "          " + totalPrice + ")");
 			}
 
 			return true;
@@ -81,14 +82,14 @@ public class RoomMaintAndBilling {
 			
 			System.out.println("Arrivals:");
 			while(rs.next()){
-				System.out.println("Hotel ID: " + rs.getString(1) +
+				System.out.println("\nHotel ID: " + rs.getString(1) +
 								   "\nRoom Number: " + rs.getString(2) +
 								   "\nGuest ID: " + rs.getString(3) +
 								   "\nStart Date: " + rs.getString(4) +
-								   "\nEnd Date: " + rs.getString(5) + "\n\n"
+								   "\nEnd Date: " + rs.getString(5)
 								  ); 
 			}
-			System.out.println("\nDone.");
+			System.out.println("Done.");
 		} catch (SQLException e) {
 			return false;
 		}
@@ -102,15 +103,15 @@ public class RoomMaintAndBilling {
 			
 			System.out.println("\nDepartures:");
 			while(rs.next()){
-				System.out.println("Hotel ID: " + rs.getString(1) +
+				System.out.println("\nHotel ID: " + rs.getString(1) +
 								   "\nRoom Number: " + rs.getString(2) +
 								   "\nGuest ID: " + rs.getString(3) +
 								   "\nStart Date: " + rs.getString(4) +
-								   "\nEnd Date: " + rs.getString(5) + "\n\n"
+								   "\nEnd Date: " + rs.getString(5)
 								  ); 
 			}
 			
-			System.out.println("\nDone");
+			System.out.println("Done");
 		} catch (SQLException e) {
 			return false;
 		}
