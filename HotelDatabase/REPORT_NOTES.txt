@@ -1,0 +1,8 @@
+1) 
+Guest name cannot be null
+
+2)
+Search hotels
+- user has to enter start and end date.. all other fields are optional
+
+3)
