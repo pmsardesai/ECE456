@@ -9,13 +9,13 @@ import java.util.Date;
 import com.mysql.jdbc.Connection;
 
 public class RoomMaintAndBilling {
-	public static boolean printBillsForDepartures(Connection conn, String date) throws ParseException {
+	public static boolean printBillsForDepartures(Connection conn) throws ParseException {
 		try {
-			// get booking and room details
+			// get booking and room details for departing guest on current date
 			String sql = "SELECT b.hotelID, b.roomNo, b.guestID, b.startDate, b.endDate, r.price " +
 						 "FROM booking b " +
 						 "    INNER JOIN Room r ON r.hotelID = b.hotelID AND r.roomNo = b.roomNo " +
-						 "WHERE endDate = '" + date + "'";
+						 "WHERE endDate = CURRENT_DATE";
 			PreparedStatement ps = conn.prepareStatement(sql);			
 			ResultSet rs = ps.executeQuery();
 			
@@ -26,10 +26,12 @@ public class RoomMaintAndBilling {
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
 				sdf.setLenient(false);
 				
+				// get number of days
 				Date startDate = sdf.parse(rs.getString(4));
 				Date endDate = sdf.parse(rs.getString(5));
-				
 				int numDays = (int)( (endDate.getTime() - startDate.getTime() ) / (1000 * 60 * 60 * 24));
+				
+				// get total price
 				double totalPrice = Integer.parseInt(rs.getString(6)) * numDays;
 				
 				// print departures				
@@ -40,13 +42,13 @@ public class RoomMaintAndBilling {
 								   "\nTotal price: " + totalPrice + "\n\n"
 								  ); 
 				
-				// get the last guest ID from the table
+				// Save billing details in billing log
 				ps = conn.prepareStatement(
 						"SELECT billingID FROM BillingLog ORDER BY billingID DESC LIMIT 1");
 				ResultSet rs2 = ps.executeQuery();
 
-				int lastBillingID = 1; // if there are no guests in the table
-				// if there are guests in the table,
+				int lastBillingID = 1; // if there are no billings logged in the table
+				// if there are billings logged in the table,
 				if(rs2.next()) {
 					// Increment
 					lastBillingID = Integer.parseInt(rs2.getString(1)) + 1;
@@ -68,15 +70,11 @@ public class RoomMaintAndBilling {
 		}
 	}
 	
-	public static boolean displayArrivalsAndDepartures(Connection conn, String date) {
+	public static boolean displayArrivalsAndDepartures(Connection conn) {
 		try {
-			// display number of days
-			// room price
-			// log into billing log
-			
-			// get the last guest ID from the table
+			// get all arrivals
 			String sql = "SELECT hotelID, roomNo, guestID, startDate, endDate FROM booking " +
-						 "WHERE startDate = '" + date + "'";
+						 "WHERE startDate = CURRENT_DATE";
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
 			
@@ -92,9 +90,9 @@ public class RoomMaintAndBilling {
 			}
 			
 			
-			// get the last guest ID from the table
+			// get all departures
 			sql = "SELECT hotelID, roomNo, guestID, startDate, endDate FROM booking " +
-						 "WHERE endDate = '" + date + "'";
+						 "WHERE endDate = ";
 			ps = conn.prepareStatement(sql);
 			rs = ps.executeQuery();
 			
@@ -149,21 +147,5 @@ public class RoomMaintAndBilling {
 		}
 		
 		return idStr;
-	}
-	
-//-----------------------VALIDATION
-	public static Boolean isDateValid(String date){
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
-		sdf.setLenient(false);
-		
-		//check if we can parse the string input into a date yyyy-MM-dd format
-		try{
-			System.out.println(sdf.parse(date));  
-			
-		}catch(Exception e){
-			return false; 
-		}
-		return true; 
-	}
-	
+	}	
 }
