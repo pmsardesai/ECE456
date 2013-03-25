@@ -41,7 +41,7 @@ public class RoomMaintAndBilling {
 								   "\nGuest ID: " + rs.getString(3) +
 								   "\nRoom number: " + rs.getString(2) +
 								   "\nTotal number of days: " + numDays);
-				System.out.printf("\nTotal price: %1$.2f", totalPrice);
+				System.out.printf("Total price: %1$.2f \n", totalPrice);
 		
 				// Save billing details in billing log
 				ps = conn.prepareStatement(
@@ -71,7 +71,7 @@ public class RoomMaintAndBilling {
 			return false;
 		}
 	}
-	
+		
 	public static boolean displayArrivalsAndDepartures(Connection conn) {
 		try {
 			// get all arrivals
@@ -80,16 +80,20 @@ public class RoomMaintAndBilling {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
 			
-			System.out.println("Arrivals:");
-			while(rs.next()){
-				System.out.println("\nHotel ID: " + rs.getString(1) +
-								   "\nRoom Number: " + rs.getString(2) +
-								   "\nGuest ID: " + rs.getString(3) +
-								   "\nStart Date: " + rs.getString(4) +
-								   "\nEnd Date: " + rs.getString(5)
-								  ); 
+			if (rs.first()) {
+				System.out.println("Arrivals:");
+				
+				// print first arrival
+				printRecord(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5));
+				while(rs.next()){
+					// print the rest of the arrivals
+					printRecord(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5));
+				}
+				
+				System.out.println("\nDone.");
+			} else {
+				System.out.println("\nArrivals: None. \n");
 			}
-			System.out.println("Done.");
 		} catch (SQLException e) {
 			return false;
 		}
@@ -101,22 +105,34 @@ public class RoomMaintAndBilling {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
 			
-			System.out.println("\nDepartures:");
-			while(rs.next()){
-				System.out.println("\nHotel ID: " + rs.getString(1) +
-								   "\nRoom Number: " + rs.getString(2) +
-								   "\nGuest ID: " + rs.getString(3) +
-								   "\nStart Date: " + rs.getString(4) +
-								   "\nEnd Date: " + rs.getString(5)
-								  ); 
+			if (rs.first()) {
+				System.out.println("Departures:");
+				
+				// print first departures
+				printRecord(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5));
+				while(rs.next()){
+					// print the rest of the departures
+					printRecord(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5));
+				}
+				
+				System.out.println("\nDone.");
+			} else {
+				System.out.println("Departures: None. \n");
 			}
-			
-			System.out.println("Done");
 		} catch (SQLException e) {
 			return false;
 		}
 		
 		return true;
+	}
+	
+	public static void printRecord(String hotelID, String roomNo, String guestID, String startDate, String endDate) {
+		System.out.println("\nHotel ID: " + hotelID +
+						   "\nRoom Number: " + roomNo +
+						   "\nGuest ID: " + guestID +
+						   "\nStart Date: " + startDate +
+						   "\nEnd Date: " + endDate
+						  ); 
 	}
 	
 // ----------------------------------- Format

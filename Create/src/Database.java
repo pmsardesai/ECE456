@@ -4,6 +4,11 @@ import java.sql.Statement;
 import com.mysql.jdbc.Connection;
 
 public class Database {
+
+	public static void main(String args[]) {
+		
+	}
+	
 	public static void createDatabase(Connection conn) {
 		try {
 			Statement stmt = conn.createStatement();
@@ -14,7 +19,7 @@ public class Database {
 		}
 	}
 	
-	public static void addTables(Connection conn, String name, String address) {
+	public static void populateTables(Connection conn) {
 		try {
 			System.out.println("Creating tables...");
 			Statement stmt = conn.createStatement();
