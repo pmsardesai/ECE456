@@ -22,7 +22,7 @@ public class Assignment3 {
 		while(true){
 			// console IO
 			System.out.println("\nMenu: \n(A) Add Guest \n(B) Delete Guest \n(C) Update Guest \n(D) Find Room " + 
-							   "\n(E) Book a Room");
+							   "\n(E) Book a Room \n(F) Admin Menu");
 			 
 			try{
 			    bufferRead = new BufferedReader(new InputStreamReader(System.in));
@@ -46,6 +46,10 @@ public class Assignment3 {
 			    	break;
 			    case 'E': // book a room
 			    	registerRoom();
+			    	break; 
+			    case 'F': //admin menu - seperate
+			    	adminMenu(); 
+			    	break; 
 			    default:
 			    	System.out.println("That option does not exist.");
 			    	break; 
@@ -200,5 +204,30 @@ public class Assignment3 {
         
         // book a room
         Booking.bookRoom(conn, hotelID, roomNo, guestID, start, end);
+	}
+
+	public static void adminMenu() throws IOException, Exception{
+		System.out.println("\nMenu: \n(A) Today's Room Maintenance List \n(B) Today's Billing");
+
+		
+		bufferRead = new BufferedReader(new InputStreamReader(System.in));
+		String s = bufferRead.readLine();
+		 
+		char a = s.toUpperCase().charAt(0); 
+		System.out.println("Selected Option: " + a);
+		 
+		switch(a){
+		case 'A':
+			RoomMaintAndBilling.displayArrivalsAndDepartures(conn); 
+			break; 
+		 case 'B':
+			RoomMaintAndBilling.printBillsForDepartures(conn); 
+			break; 
+		default:
+			System.out.println("That option does not exist."); 
+			break; 		 
+		 }
+			
+		return; 
 	}
 }

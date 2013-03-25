@@ -9,3 +9,9 @@ Search hotels
 
 
 3)
+
+4) 
+
+part 2 - assuming that departure/endDate = current date
+
+maintain data integrity - use only one db conn globally 
