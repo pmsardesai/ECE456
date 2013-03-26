@@ -10,8 +10,8 @@ import com.mysql.jdbc.Connection;
 public class Booking {
 
 //-----------------------------QUESTION 2
-	public static ResultSet findRoom(Connection conn, String start, String end, 
-			String name, String city, String price, String type) throws SQLException{
+	public static String findRoom(Connection conn, String start, String end, 
+			String name, String city, String price, String type){
 		
 		String select = "SELECT H.hotelID, H.hotelName, H.city, R.roomNo, R.price, R.type "; 
 		String from = "FROM Hotel H INNER JOIN ROOM R ON H.hotelID = R.hotelID "; 
@@ -64,19 +64,29 @@ public class Booking {
 				
 		String query = select + from + subquery; 
 		//System.out.println(query); 
-		Statement s = conn.createStatement();
-		ResultSet rs = s.executeQuery(query); 
-				
-		while(rs.next()){
-			System.out.println("HotelID: " + rs.getString(1) +
-					"\nHotelName: " + rs.getString(2) +
-					"\nCity: " + rs.getString(3) +
-					"\nRoomNo: " + rs.getString(4) +
-					"\nPrice: " + rs.getString(5) + 
-					"\nType: " + rs.getString(6) + "\n\n"
-					); 
+		Statement s = null;
+		ResultSet rs = null; 
+		try {
+			s = conn.createStatement();
+		
+			rs = s.executeQuery(query); 
+			
+			if(!rs.next())
+				return "No Rooms Found"; 
+			
+			while(rs.next()){
+				System.out.println("HotelID: " + rs.getString(1) +
+						"\nHotelName: " + rs.getString(2) +
+						"\nCity: " + rs.getString(3) +
+						"\nRoomNo: " + rs.getString(4) +
+						"\nPrice: " + rs.getString(5) + 
+						"\nType: " + rs.getString(6) + "\n\n"
+						); 
+			}
+		} catch (SQLException e) {
+			return "Error"; 
 		}
-		return rs;  		
+		return "Found Room";  		
 	}
  //-----------------------VALIDATION
 	public static Boolean isDateValid(String date){
@@ -98,12 +108,12 @@ public class Booking {
 		
 		// find bookings with the same hotel, and room + overlapping startDate and endDate
 		String query = "SELECT * FROM BOOKING WHERE " +
-				formatID(Integer.parseInt(hotelID)) + "', '" + 
-				formatID(Integer.parseInt(roomNo)) + "', '" +
-				"startDate BETWEEN '" + startDate + "' AND '" + endDate +
+				"hotelID = '" + formatID(Integer.parseInt(hotelID)) + "' AND " + 
+				"roomNo = '" + formatID(Integer.parseInt(roomNo)) + "' AND " +
+				"(startDate BETWEEN '" + startDate + "' AND '" + endDate +
 					"' OR endDate BETWEEN '" + startDate + "' AND '" + endDate +
 					"'OR (startDate < '" + startDate + 
-					"' AND endDate > '" + endDate + "')"; 
+					"' AND endDate > '" + endDate + "'));"; 
 		//System.out.println(query); 
 		
 		try {

@@ -16,22 +16,60 @@ public class BookingTest {
 	}
 	
 	@Test
-	public void GetBooking() {
+	public void GetBooking() throws SQLException {
 		String start = "2013-01-01"; 
-		String end = "2013-01-10"; 
+		String end = "2013-01-01"; 
 		String name = "Hilton"; 
 		String city = "Waterloo"; 
 		String price = null; 
 		String type = "Single"; 
 		
-		ResultSet rs = null ;
+		String s = null ;
 		
-		try {
-			rs = Booking.findRoom(conn, start, end, name, city, price, type);
-		} catch (SQLException e) {
-			fail("findRoom() did not finish executing");  
-		} 
-		assertNotNull("findRoom() returned results", rs); 
+		s = Booking.findRoom(conn, start, end, name, city, price, type); 
+		assertSame(s,"Found Room"); 
 	}
 
+	@Test
+	public void GetNoBooking() throws SQLException {
+		String start = "2013-01-01"; 
+		String end = "2013-01-01"; 
+		String name = "Hilton"; 
+		String city = "Toronto"; //shouldn't find any results 
+		String price = null; 
+		String type = "Single"; 
+		
+		String s = null ;
+		
+		s = Booking.findRoom(conn, start, end, name, city, price, type); 
+		assertSame(s,"No Rooms Found"); 
+	}
+
+	@Test
+	public void checkBookingDoesntExists() throws SQLException {
+		String startDate = "2013-12-01"; 
+		String endDate = "2013-12-10"; 
+		String hotelID = "0001"; 
+		String roomNo = "0001"; 
+		
+		Boolean s = null ;
+		
+		s = Booking.checkBookingExists(conn, hotelID, roomNo, startDate, endDate); 
+		assertTrue("No Conflict", !s); 
+	}
+
+	@Test
+	public void checkBookingExists() throws SQLException {
+		String startDate = "2013-08-01"; 
+		String endDate = "2013-08-10"; 
+		String hotelID = "0001"; 
+		String roomNo = "0001"; 
+		
+		Boolean s = null ;
+		
+		s = Booking.checkBookingExists(conn, hotelID, roomNo, startDate, endDate); 
+		assertTrue("Conflict Found", s); 
+	}
+	
+	
 }
