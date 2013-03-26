@@ -62,19 +62,6 @@ public class GuestTest {
 	}
 	
 	@Test
-	// This test case should be able to delete a guest with a valid id
-	public void delete_guest_with_valid_guest_id() {
-		// assume guest id 2 exists in database
-		String id = "2";
-
-		if (Guest.delete(conn, id)) {
-			assertTrue("Successfully deleted guest.", true);
-		} else {
-			fail("Error: Could not delete guest.");
-		}
-	}
-	
-	@Test
 	// This test case should not be able to delete a guest with an invalid id
 	public void delete_guest_with_invalid_guest_id() {
 		String id = "aa";
