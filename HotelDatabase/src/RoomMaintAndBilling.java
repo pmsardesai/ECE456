@@ -54,7 +54,7 @@ public class RoomMaintAndBilling {
 					// Increment
 					lastBillingID = Integer.parseInt(rs2.getString(1)) + 1;
 				} 
-				
+
 				// Insert into billing table
 				Statement s = conn.createStatement();
 				s.executeUpdate("INSERT INTO BillingLog (billingID, hotelID, guestID, roomNo, totalDays, totalPrice) " +
@@ -68,6 +68,7 @@ public class RoomMaintAndBilling {
 
 			return true;
 		} catch (Exception e) {
+			System.out.println("Error: An unexpected error occurred. Please try again.");
 			return false;
 		}
 	}
@@ -95,6 +96,7 @@ public class RoomMaintAndBilling {
 				System.out.println("\nArrivals: None. \n");
 			}
 		} catch (SQLException e) {
+			System.out.println("Error: An unexpected error occurred. Please try again.");
 			return false;
 		}
 	
@@ -120,6 +122,7 @@ public class RoomMaintAndBilling {
 				System.out.println("Departures: None. \n");
 			}
 		} catch (SQLException e) {
+			System.out.println("Error: An unexpected error occurred. Please try again.");
 			return false;
 		}
 		

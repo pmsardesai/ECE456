@@ -55,7 +55,7 @@ public class Guest {
 			
 			s.executeUpdate(sql);
 		} catch (Exception e) {
-			System.out.println("Error: Could not update guest.");
+			System.out.println("Error: An unexpected error occurred, and guest could not be updated. Please try again.");
 			e.printStackTrace();
 			return;
 		}
@@ -70,7 +70,7 @@ public class Guest {
 					        formatID(Integer.parseInt(id)) + "'"
 					       );	
 		} catch (SQLException e) {
-			System.out.println("Error: Could not delete guest.");
+			System.out.println("Error: An unexpected error occurred, and the guest could not be deleted. Please try again.");
 			e.printStackTrace();
 			return;
 		}
@@ -152,6 +152,7 @@ public class Guest {
 				return false;
 			}
 		} catch (Exception e) {
+			System.out.println("Error: An unexpected error occurred. Please try again.");
 			return false;
 		}
 	}
