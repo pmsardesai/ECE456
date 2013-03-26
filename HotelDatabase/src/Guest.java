@@ -5,7 +5,7 @@ import java.sql.Statement;
 import com.mysql.jdbc.Connection;
 
 public class Guest {
-	public static void add(Connection conn, String name, String address) {
+	public static ResultSet add(Connection conn, String name, String address) {
 		try {
 			// get the last guest ID from the table
 			PreparedStatement ps = conn.prepareStatement(
@@ -22,13 +22,16 @@ public class Guest {
 			// Insert guest into table
 			Statement s = conn.createStatement();
 			s.executeUpdate("INSERT INTO guest (guestID, guestAddress, guestName) " +
-					        "VALUES ('" + formatID(lastGuestID) + "', '" + address + "', '" + name + "')");	
+					        "VALUES ('" + formatID(lastGuestID) + "', '" + address + "', '" + name + "')");
+			
+			System.out.println("Successfully added guest.");
+			
+			return rs;
 		} catch (SQLException e) {
 			System.out.println("Error: An unexpected error occurred, and the guest could not be added. " +
 		                       "Please try again.");
-			return;
+			return null;
 		}
-		System.out.println("Successfully added guest.");
 	}
 	
 	public static void update(Connection conn, String id, String name, String address){
@@ -62,7 +65,7 @@ public class Guest {
 		System.out.println("Successfully updated guest.");
 	}
 	
-	public static void delete(Connection conn, String id){
+	public static Boolean delete(Connection conn, String id){
 		try {			
 			Statement s = conn.createStatement();
 			s.executeUpdate("DELETE FROM guest " +
@@ -72,9 +75,10 @@ public class Guest {
 		} catch (SQLException e) {
 			System.out.println("Error: An unexpected error occurred, and the guest could not be deleted. Please try again.");
 			e.printStackTrace();
-			return;
+			return false;
 		}
 		System.out.println("Successfully deleted guest.");
+		return true;
 	}	
 	
 // ------------------------ FORMAT
@@ -128,32 +132,5 @@ public class Guest {
 			return false;
 		}
 		return true;
-	}
-	
-	public static boolean isGuestIdValid(Connection conn, String id) {
-		try {
-			// make sure id is an integer
-			int guestID = Integer.parseInt(id);
-
-			// make sure guest id is a 4 digit number
-			if ((int)(guestID / 10000) != 0) {
-				return false;
-			}
-						
-			// get the last guest ID from the table
-			PreparedStatement ps = conn.prepareStatement(
-					"SELECT * FROM guest WHERE guestID = '" + formatID(guestID) + "'");
-			ResultSet rs = ps.executeQuery();
-			
-			// if id exists in database,
-			if (rs.next()) {
-				return true;
-			} else { // if id does not exist in database,
-				return false;
-			}
-		} catch (Exception e) {
-			System.out.println("Error: An unexpected error occurred. Please try again.");
-			return false;
-		}
 	}
 }

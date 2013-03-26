@@ -86,11 +86,6 @@ public class Assignment3 {
     	System.out.println("Enter the guest ID: ");
         String id = bufferRead.readLine();
         
-        while(!Guest.isGuestIdValid(conn, id)){
-        	System.out.println("Invalid: Please enter a 4-digit guest ID:");
-	        id = bufferRead.readLine();
-        }
-        
     	//call delete guest
     	Guest.delete(conn, id);
 	}
@@ -99,11 +94,6 @@ public class Assignment3 {
 		System.out.println("Enter the guest ID: ");
 		String id = bufferRead.readLine();
 		
-		while(!Guest.isGuestIdValid(conn, id)){
-        	System.out.println("Invalid: Please enter a 4-digit guest ID:");
-	        id = bufferRead.readLine();
-        }
-
     	System.out.println("Enter the guest's full name, or press enter to skip: ");
         String name = bufferRead.readLine().trim();
         
