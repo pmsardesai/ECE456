@@ -10,7 +10,7 @@ import com.mysql.jdbc.Connection;
 public class Booking {
 
 //-----------------------------QUESTION 2
-	public static void findRoom(Connection conn, String start, String end, 
+	public static ResultSet findRoom(Connection conn, String start, String end, 
 			String name, String city, String price, String type) throws SQLException{
 		
 		String select = "SELECT H.hotelID, H.hotelName, H.city, R.roomNo, R.price, R.type "; 
@@ -61,13 +61,12 @@ public class Booking {
 					"'OR (startDate < '" + start + "' AND endDate > '" + end + "'))"; 
 
 		}
-		
-		
+				
 		String query = select + from + subquery; 
 		//System.out.println(query); 
 		Statement s = conn.createStatement();
 		ResultSet rs = s.executeQuery(query); 
-		
+				
 		while(rs.next()){
 			System.out.println("HotelID: " + rs.getString(1) +
 					"\nHotelName: " + rs.getString(2) +
@@ -77,6 +76,7 @@ public class Booking {
 					"\nType: " + rs.getString(6) + "\n\n"
 					); 
 		}
+		return rs;  		
 	}
  //-----------------------VALIDATION
 	public static Boolean isDateValid(String date){
