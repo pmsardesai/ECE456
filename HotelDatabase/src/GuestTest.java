@@ -1,10 +1,10 @@
 import static org.junit.Assert.*;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import org.junit.Test;
-
 import com.mysql.jdbc.Connection;
-
 
 public class GuestTest {
 	static Connection conn;
@@ -115,17 +115,30 @@ public class GuestTest {
 	}
 	
 	@Test
-	// This test case checks to see if you can update a guest with an invalid id
+	// This test case should not update the name of the guest to an empty string
 	public void test_update_guest_with_name_as_null() {
-		// assume that there is a guest ID of 1 in the database
+		// guest ID: 1 should exist in the database.
 		String id = "1";
 		String name = null;
 		String address = "457 University Ave.";
 		
-		if (!Guest.update(conn, id, name, address)) {
-			assertTrue("As expected, ", true);
+		if (Guest.update(conn, id, name, address)) {
+			// check to see if the name is updated in the database
+			try {
+				// get the last guest ID from the table
+				PreparedStatement ps = conn.prepareStatement(
+						"SELECT guestName FROM guest WHERE guestID=1");
+				ResultSet rs = ps.executeQuery();
+
+				// if name exists in the database
+				if(rs.next()) {
+					assertNotNull("Name is not updated in the database", rs.getString(1));
+				} 
+			} catch (Exception e) {
+				fail("Error: Guest name should not update to null...");
+			}
 		} else {
-			fail("Error: User is updated....");
+			fail("Error: Guest info is not updated...");
 		}
 	}
 }
