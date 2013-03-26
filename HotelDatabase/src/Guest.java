@@ -27,21 +27,21 @@ public class Guest {
 			System.out.println("Successfully added guest.");
 			
 			return rs;
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			System.out.println("Error: An unexpected error occurred, and the guest could not be added. " +
 		                       "Please try again.");
 			return null;
 		}
 	}
 	
-	public static void update(Connection conn, String id, String name, String address){
+	public static boolean update(Connection conn, String id, String name, String address){
 		try {			
 			Statement s = conn.createStatement();
 			
 			String sql = "UPDATE guest SET ";
 			// if agent does not want to update anything....
 			if (name == null && address == null) {
-				return; //do nothing
+				return true; //do nothing
 			// if agent only wants to update address,
 			} else if (name == null) {
 				sql = sql + "guestAddress = '" + address + "' ";
@@ -59,22 +59,21 @@ public class Guest {
 			s.executeUpdate(sql);
 		} catch (Exception e) {
 			System.out.println("Error: An unexpected error occurred, and guest could not be updated. Please try again.");
-			e.printStackTrace();
-			return;
+			return false;
 		}
 		System.out.println("Successfully updated guest.");
+		return true;
 	}
 	
-	public static Boolean delete(Connection conn, String id){
+	public static boolean delete(Connection conn, String id){
 		try {			
 			Statement s = conn.createStatement();
 			s.executeUpdate("DELETE FROM guest " +
 					  		"WHERE guestID = '" + 
 					        formatID(Integer.parseInt(id)) + "'"
 					       );	
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			System.out.println("Error: An unexpected error occurred, and the guest could not be deleted. Please try again.");
-			e.printStackTrace();
 			return false;
 		}
 		System.out.println("Successfully deleted guest.");
