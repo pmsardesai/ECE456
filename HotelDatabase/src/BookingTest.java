@@ -16,7 +16,8 @@ public class BookingTest {
 	}
 	
 	@Test
-	public void GetBooking() throws SQLException {
+	// this should get some rooms as results
+	public void FindRoom() throws SQLException {
 		String start = "2013-01-01"; 
 		String end = "2013-01-01"; 
 		String name = "Hilton"; 
@@ -31,7 +32,8 @@ public class BookingTest {
 	}
 
 	@Test
-	public void GetNoBooking() throws SQLException {
+	//this should get no results
+	public void FindNoRoom() throws SQLException {
 		String start = "2013-01-01"; 
 		String end = "2013-01-01"; 
 		String name = "Hilton"; 
@@ -46,6 +48,7 @@ public class BookingTest {
 	}
 
 	@Test
+	// this shows there are not booking conflicts
 	public void checkBookingDoesntExists() throws SQLException {
 		String startDate = "2013-12-01"; 
 		String endDate = "2013-12-10"; 
@@ -59,6 +62,7 @@ public class BookingTest {
 	}
 
 	@Test
+	//this shows that booking conflicts exist
 	public void checkBookingExists() throws SQLException {
 		String startDate = "2013-08-01"; 
 		String endDate = "2013-08-10"; 
