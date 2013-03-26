@@ -135,7 +135,7 @@ public class Assignment3 {
         hotel = hotel.length() == 0 ? null : hotel;
         
         // get city input 
-        System.out.println("Enter the city, or press enter to skip: ");
+        System.out.println("Enter the city (Waterloo, Guelph, Kitchener), or press enter to skip: ");
         String city = bufferRead.readLine();
         city = city.length() == 0 ? null : city;
         

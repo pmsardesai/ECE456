@@ -153,12 +153,14 @@ public class Booking {
 				
 				// Insert booking into table
 				Statement s = conn.createStatement();
-				s.executeUpdate("INSERT INTO Booking (bookingID, hotelID, guestID, roomNo, startDate, endDate) " +
+				String query = "INSERT INTO Booking (bookingID, hotelID, guestID, roomNo, startDate, endDate) " +
 						        "VALUES ('" + formatID(lastBookingID) + "', '" + 
 						formatID(Integer.parseInt(hotelID)) + "', '" + 
 						formatID(Integer.parseInt(guestID)) + "', '" +
 						formatID(Integer.parseInt(roomNo)) + "', '" +
-						startDate + "', '" + endDate + "');");	
+						startDate + "', '" + endDate + "');"; 
+				s.execute(query); 
+				//System.out.println(query);
 			} catch (SQLException e) {
 				System.out.println("Error: Could not add booking - error.");
 				//e.printStackTrace();
